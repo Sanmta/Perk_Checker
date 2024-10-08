@@ -1,13 +1,13 @@
 
 <h1 align="center">
   <br>
-  <a href="https://discord.gg/dbdleague"><img src="https://github.com/Sanmta/DBDL_Perk_Checker/blob/main/assets/DBDL.png?raw=true" alt="DBDLeague" width="200"></a>
+  <img src="https://github.com/Sanmta/Perk_Checker/blob/main/assets/perk_checker.png?raw=true" alt="Logo" width="200">
   <br>
-  DBDLeague Perk Checker
+  DBD Perk Checker
   <br>
 </h1>
 
-<h4 align="center">A quick perk checker for match officials and staff of DBDLeague</a>.</h4>
+<h4 align="center">A quick perk checker for staff.</h4>
 
 <p align="center">
   <a href="#key-features">Key Features</a> •
