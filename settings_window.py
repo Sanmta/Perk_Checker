@@ -13,7 +13,7 @@ class Ui_SettingsWindow(QDialog):
         super().__init__(parent)
 
         self.setWindowTitle("Settings")
-        self.setGeometry(100, 100, 300, 200)
+        self.setGeometry(100, 100, 150, 150)
 
         self.central_widget = QWidget(self)  # Create a QWidget for the central area
         #self.setCentralWidget(self.central_widget)  # Set central widget for the dialog
@@ -105,8 +105,7 @@ class Ui_SettingsWindow(QDialog):
         self.central_widget.findChild(QtWidgets.QLabel, "ui_value_label").setText("In-game UI scale: " + str(value))
 
     def checkbox_toggled(value, state):
-        always_dejavu
-
+        global always_dejavu
         if state == Qt.CheckState.Checked.value:
             always_dejavu = True
             print("Always Deja Vu is now True")
@@ -116,6 +115,7 @@ class Ui_SettingsWindow(QDialog):
             print("Always Deja Vu is now False")
 
 def load_settings(self):
+        global always_dejavu, ui_scale
         try:
             with open("settings.txt", "r") as f:
                 lines = f.readlines()
@@ -124,7 +124,7 @@ def load_settings(self):
                     if key == "ingame_ui_scale":
                         ui_scale = int(value)
                     elif key == "all_eyes_are_dejavu": 
-                        always_dejavu = value 
+                        always_dejavu = bool(value) 
                 return ui_scale, always_dejavu
         except Exception as e:
             pass

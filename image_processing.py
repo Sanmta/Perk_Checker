@@ -112,7 +112,7 @@ def search(end_screen, always_dejavu, ui_scale):
         # if the best match is an eye perk, apply thresholding to the ROI and compare again as they are harder to match
         if "DejaVu" in reference_files[best_match] or "ObjectOfObsession" in reference_files[best_match] or "DarkSense" in reference_files[best_match] or "Kindred" in reference_files[best_match]:
             threshold_needed = True # flag to indicate that thresholding is needed
-            if (always_dejavu == True):
+            if (always_dejavu):
                 for p, perk in enumerate(reference_files):
                     if "DejaVu" in perk:
                         best_match_threshold = p
