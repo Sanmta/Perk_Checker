@@ -1,0 +1,2 @@
+ingame_ui_scale=75
+all_eyes_are_dejavu=True

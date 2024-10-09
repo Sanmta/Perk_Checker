@@ -8,9 +8,6 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6.QtCore import Qt
 
-always_dejavu = False
-ui_scale = 75
-
 class Ui_SettingsWindow(QDialog):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -29,7 +26,8 @@ class Ui_SettingsWindow(QDialog):
         self.checkbox_eyes.stateChanged.connect(lambda: self.checkbox_toggled)   
         layout.addWidget(self.checkbox_eyes)
 
-        self.ui_value_label = QLabel("In-game UI scale: " + str(ui_scale),  self.central_widget)
+
+        self.ui_value_label = QLabel("In-game UI scale: ", self.central_widget)
         self.ui_value_label.setObjectName("ui_value_label")
         layout.addWidget(self.ui_value_label)
 
@@ -42,7 +40,49 @@ class Ui_SettingsWindow(QDialog):
         layout.addWidget(self.ingame_ui_slider)
 
         self.ui_value_label = QLabel(self.central_widget)
-    
+
+        self.save_button = QPushButton("Apply", self.central_widget)
+        layout.addWidget(self.save_button)
+        self.save_button.clicked.connect(self.save_settings)
+
+        self.reset_button = QPushButton("Reset", self.central_widget)
+        layout.addWidget(self.reset_button)
+        self.reset_button.clicked.connect(self.reset_settings)
+        
+        self.reset_settings()
+
+    def reset_settings(self):
+        try:
+            with open("settings.txt", "r") as f:
+                    lines = f.readlines()
+                    for line in lines:
+                        key, value = line.strip().split("=")
+                        if key == "ingame_ui_scale":
+                            self.ingame_ui_slider.setValue(int(value))
+                        elif key == "all_eyes_are_dejavu":
+                            self.checkbox_eyes.setChecked(value == "True")
+        except Exception as e:
+            pass
+
+
+    def save_settings(self):
+        try:
+            with open("settings.txt", "w") as f:
+                f.write(f"ingame_ui_scale={self.ingame_ui_slider.value()}\n")
+                f.write(f"all_eyes_are_dejavu={self.checkbox_eyes.isChecked()}\n")
+
+            success_message = QMessageBox(self)  # Create a QMessageBox
+            success_message.setWindowTitle("Success")  # Set title
+            success_message.setText("Settings saved successfully.")  # Set message text
+            success_message.setIcon(QMessageBox.Icon.Information)  # Set icon
+            success_message.setStandardButtons(QMessageBox.StandardButton.Ok)  # Add Ok button
+            success_message.exec()  # Show the message box
+        except Exception as e:
+            error_message = QMessageBox(self)
+            error_message.setWindowTitle("Error")
+            error_message.setText("An error occurred while saving the settings.")
+            error_message.setIcon(QMessageBox.Icon.Critical)
+            error_message.setStandardButtons(QMessageBox.StandardButton.Ok)
 
     def auto_set_slider(self, value):
         if value < 73:
@@ -74,3 +114,17 @@ class Ui_SettingsWindow(QDialog):
         elif state == Qt.CheckState.Unchecked.value:
             always_dejavu = False
             print("Always Deja Vu is now False")
+
+def load_settings(self):
+        try:
+            with open("settings.txt", "r") as f:
+                lines = f.readlines()
+                for line in lines:
+                    key, value = line.strip().split("=")
+                    if key == "ingame_ui_scale":
+                        ui_scale = int(value)
+                    elif key == "all_eyes_are_dejavu": 
+                        always_dejavu = value 
+                return ui_scale, always_dejavu
+        except Exception as e:
+            pass
