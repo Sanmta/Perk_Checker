@@ -72,8 +72,6 @@ class Ui_MainWindow(QMainWindow):
 
         MainWindow.show()
         
-        ui_scale, always_dejavu = load_settings(self)
-        
         show_error_message("Warning", "This program should NOT replace manual perk checking, it is only a tool to assist in the process and it may give wrong results from time to time. Send me a Discord message @sanmta with any feature ideas or bugs you find. Happy perk checking!") 
 
 # function to get an image from clipboard and search for perks
@@ -93,7 +91,10 @@ def paste_image(self):
         
 
     end_screen_screenshot = cv2.cvtColor(np.array(clipboard_image), cv2.COLOR_RGB2BGR)
-    create_perk_arrays(self, search(end_screen_screenshot, always_dejavu))
+    global ui_scale, always_dejavu
+    ui_scale = load_settings(self)[0] 
+    always_dejavu = load_settings(self)[1]
+    create_perk_arrays(self, search(end_screen_screenshot, always_dejavu, ui_scale))
 
 # function to create arrays of both selected perks and detected perks
 def create_perk_arrays(self, perks):
@@ -464,7 +465,7 @@ def list_of_all_perks():
         'Urban Evasion',
         'Vigil',
         'Visionary',
-        'Wake Up!',
+        'Wake Up',
         'We\'ll Make It',
         'We\'re Gonna Live Forever',
         'Wicked',
