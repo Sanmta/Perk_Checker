@@ -15,16 +15,71 @@ def compare_images(imageA, imageB):
     s = ssim(imageA, imageB)
     return m, s
 
+def switch(ui_scale):
+    switcher = {
+        70: 37,
+        75: 39,
+        80: 42,
+        85: 44,
+        90: 46,
+        95: 49,
+        100: 50
+        }
+    return switcher.get(ui_scale)
+
 # function that searches for perks in the end screen given the end screen image and positions of the ROIs
-def search(end_screen, always_dejavu):
+def search(end_screen, always_dejavu, ui_scale):
     end_screen_gray=cv2.cvtColor(end_screen, cv2.COLOR_BGR2GRAY) # convert the image to grayscale to allow for thresholding
-    rois = [
-        (158 + (j*47), 343 + (i*102), 42, 42)  # (x (top left), y (top left), width, height)
+    widths = switch(ui_scale) # get the width of the ROIs based on the UI scale
+    if ui_scale == 70:
+        rois = [
+            (129 + (j*38), 372 + (i*85), widths, widths)  # (x (top left), y (top left), width, height)
 
-        for i in range(4)  # builds
-        for j in range(4)  # perks
-    ]
+            for i in range(4)  # builds
+            for j in range(4)  # perks
+        ]
+    elif ui_scale == 75:
+        rois = [
+            (137 + (j*43), 360 + (i*91), widths, widths)  # (x (top left), y (top left), width, height)
 
+            for i in range(4)  # builds
+            for j in range(4)  # perks
+        ]
+    elif ui_scale == 80:
+        rois = [
+            (148 + (j*43), 348 + (i*97), widths, widths)  # (x (top left), y (top left), width, height)
+
+            for i in range(4)  # builds
+            for j in range(4)  # perks
+        ]
+    elif ui_scale == 85:
+        rois = [
+            (157 + (j*47), 336 + (i*103), widths, widths)  # (x (top left), y (top left), width, height)
+
+            for i in range(4)  # builds
+            for j in range(4)  # perks
+        ]
+    elif ui_scale == 90:
+        rois = [
+            (167 + (j*50), 325 + (i*107), widths, widths)  # (x (top left), y (top left), width, height)
+
+            for i in range(4)  # builds
+            for j in range(4)  # perks
+        ]
+    elif ui_scale == 95:
+        rois = [
+            (175 + (j*53), 313 + (i*115), widths, widths)  # (x (top left), y (top left), width, height)
+
+            for i in range(4)  # builds
+            for j in range(4)  # perks
+        ]
+    elif ui_scale == 100:
+        rois = [
+            (185 + (j*56), 301 + (i*121), widths, widths)  # (x (top left), y (top left), width, height)
+
+            for i in range(4)  # builds
+            for j in range(4)  # perks
+        ]
     # performed testing with standard pngs, then with pngs along with perk backgrounds, however the accuracy was low
     # so switched to jpgs with solid white background, which provided a higher accuracy
     reference_files = os.listdir('assets/perks') 
@@ -32,16 +87,16 @@ def search(end_screen, always_dejavu):
         cv2.imread(os.path.join('assets/perks', file_name), cv2.IMREAD_GRAYSCALE) # load reference images in grayscale
         for file_name in reference_files
     ]
-    #  resize reference images so they match the size of the ROIs (47x47), otherwise the program will error out
+    #  resize reference images so they match the size of the ROIs, otherwise the program will error out
     resized_reference_images = [
-        cv2.resize(cv2.imread(os.path.join('assets/perks', file_name), cv2.IMREAD_GRAYSCALE), (42, 42))
+        cv2.resize(cv2.imread(os.path.join('assets/perks', file_name), cv2.IMREAD_GRAYSCALE), (widths, widths))
         for file_name in reference_files
     ]
     recognised_perks = [] 
     # main loop to iterate through all ROIs
     for i, (x, y, w, h) in enumerate(rois):
         roi = end_screen_gray[y:y+h, x:x+w]
-        #cv2.imwrite('testing/tests/roi'+str(i)+'.png', roi) # save the ROIs for testing 
+        cv2.imwrite('testing/tests/roi'+str(i)+'.png', roi) # save the ROIs for testing 
         _, thresholded_roi = cv2.threshold(roi, 106, 255, cv2.THRESH_BINARY) # apply thresholding in case needed
         mse_result = 0  # CURRENTLY UNUSED FOR COPARISON BUT HERE IN CASE NEEDED LATER #
         ssim_result = 0
