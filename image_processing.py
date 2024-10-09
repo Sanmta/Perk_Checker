@@ -96,7 +96,7 @@ def search(end_screen, always_dejavu, ui_scale):
     # main loop to iterate through all ROIs
     for i, (x, y, w, h) in enumerate(rois):
         roi = end_screen_gray[y:y+h, x:x+w]
-        cv2.imwrite('testing/tests/roi'+str(i)+'.png', roi) # save the ROIs for testing 
+        #cv2.imwrite('testing/tests/roi'+str(i)+'.png', roi) # save the ROIs for testing 
         _, thresholded_roi = cv2.threshold(roi, 106, 255, cv2.THRESH_BINARY) # apply thresholding in case needed
         mse_result = 0  # CURRENTLY UNUSED FOR COPARISON BUT HERE IN CASE NEEDED LATER #
         ssim_result = 0
