@@ -68,6 +68,7 @@ class Ui_SettingsWindow(QDialog):
     def save_settings(self):
         try:
             with open("settings.txt", "w") as f:
+                self.auto_set_slider(self.ingame_ui_slider.value())
                 f.write(f"ingame_ui_scale={self.ingame_ui_slider.value()}\n")
                 f.write(f"all_eyes_are_dejavu={self.checkbox_eyes.isChecked()}\n")
 
@@ -103,6 +104,7 @@ class Ui_SettingsWindow(QDialog):
 
     def display(self, value):
         self.central_widget.findChild(QtWidgets.QLabel, "ui_value_label").setText("In-game UI scale: " + str(value))
+        self.ingame_ui_slider.setValue(value)
 
     def checkbox_toggled(value, state):
         global always_dejavu
